@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园公告与留言墙</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            background: #e0e0e0;
+            color: #333;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .add-btn {
+            padding: 10px 25px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .content-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .card-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .card-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            padding: 8px 20px;
+            border: none;
+            background: #ff4444;
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        .warning-tag {
+            background: #ff9800;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            font-size: 2rem;
+            color: #888;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group-radio {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .form-group-radio label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .form-group-radio input[type="radio"] {
+            width: auto;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .author-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            z-index: 2000;
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.warning {
+            background: #ff9800;
+        }
+
+        .toast.error {
+            background: #ff4444;
+        }
+
+        .toast.success {
+            background: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🏫 校园公告与留言墙</h1>
+            <nav>
+                <button class="nav-btn active" data-section="announcement">学校公告</button>
+                <button class="nav-btn" data-section="lostfound">失物招领</button>
+                <button class="nav-btn" data-section="message">留言墙</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="announcement" class="section active">
+            <div class="section-header">
+                <h2>📢 学校公告</h2>
+                <button class="add-btn" onclick="openModal('announcement')">+ 发布公告</button>
+            </div>
+            <div id="announcement-list" class="content-list"></div>
+        </section>
+
+        <section id="lostfound" class="section">
+            <div class="section-header">
+                <h2>🔍 失物招领</h2>
+                <button class="add-btn" onclick="openModal('lostfound')">+ 发布信息</button>
+            </div>
+            <div id="lostfound-list" class="content-list"></div>
+        </section>
+
+        <section id="message" class="section">
+            <div class="section-header">
+                <h2>💬 留言墙</h2>
+                <button class="add-btn" onclick="openModal('message')">+ 发布留言</button>
+            </div>
+            <div id="message-list" class="content-list"></div>
+        </section>
+    </main>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">发布内容</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="content-form">
+                <div class="form-group">
+                    <label for="content-title">标题</label>
+                    <input type="text" id="content-title" placeholder="请输入标题" required>
+                </div>
+                <div class="form-group">
+                    <label>作者</label>
+                    <div class="form-group-radio">
+                        <label>
+                            <input type="radio" name="author-type" value="anonymous" checked>
+                            匿名
+                        </label>
+                        <label>
+                            <input type="radio" name="author-type" value="name">
+                            署名
+                        </label>
+                    </div>
+                    <input type="text" id="author-name" placeholder="请输入你的名字" style="margin-top: 10px; display: none;">
+                </div>
+                <div class="form-group">
+                    <label for="content-text">内容</label>
+                    <textarea id="content-text" placeholder="请输入内容" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">发布</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const badWords = ['脏话', '骂人', '该死', '白痴', '笨蛋', '傻瓜', '神经病', '疯子', '滚蛋', '去死', '混蛋', '傻逼', 'sb', '狗日', '妈的', '操', '日', '草', '婊子', '鸡巴', '屌', '逼', '尼玛', '你妈', '去你妈', '去你妈的', 'nigger', 'nigga', 'gay', 'faggot', 'fag', 'retard', 'idiot', 'stupid', 'dumb', 'fuck', 'shit', 'bitch', 'asshole', 'cunt', 'dick', 'pussy', 'whore', 'slut'];
+        
+        let currentSection = 'announcement';
+        let contentDB = {
+            announcement: [],
+            lostfound: [],
+            message: []
+        };
+
+        const AUTO_DELETE_HOURS = 24;
+
+        function init() {
+            loadFromStorage();
+            bindEvents();
+            renderAll();
+            setInterval(checkAutoDelete, 60000);
+        }
+
+        function loadFromStorage() {
+            const stored = localStorage.getItem('campusBoard');
+            if (stored) {
+                contentDB = JSON.parse(stored);
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('campusBoard', JSON.stringify(contentDB));
+        }
+
+        function bindEvents() {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchSection(btn.dataset.section);
+                });
+            });
+
+            document.getElementById('content-form').addEventListener('submit', handleSubmit);
+
+            // 单选按钮事件
+            document.querySelectorAll('input[name="author-type"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const authorNameInput = document.getElementById('author-name');
+                    if (e.target.value === 'name') {
+                        authorNameInput.style.display = 'block';
+                        authorNameInput.required = true;
+                    } else {
+                        authorNameInput.style.display = 'none';
+                        authorNameInput.required = false;
+                    }
+                });
+            });
+        }
+
+        function switchSection(section) {
+            currentSection = section;
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(section).classList.add('active');
+        }
+
+        function openModal(section) {
+            currentSection = section;
+            const titles = {
+                announcement: '发布公告',
+                lostfound: '发布失物招领',
+                message: '发布留言'
+            };
+            document.getElementById('modal-title').textContent = titles[section];
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('content-title').value = '';
+            document.getElementById('content-text').value = '';
+            document.getElementById('author-name').value = '';
+            document.getElementById('author-name').style.display = 'none';
+            document.querySelector('input[name="author-type"][value="anonymous"]').checked = true;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('content-title').value.trim();
+            const content = document.getElementById('content-text').value.trim();
+            const authorType = document.querySelector('input[name="author-type"]:checked').value;
+            const authorName = document.getElementById('author-name').value.trim();
+
+            if (!title || !content) {
+                showToast('请填写完整信息', 'error');
+                return;
+            }
+
+            if (authorType === 'name' && !authorName) {
+                showToast('请输入你的名字', 'error');
+                return;
+            }
+
+            // 检查标题和内容中的违禁词
+            const titleCheck = checkBadWords(title);
+            const contentCheck = checkBadWords(content);
+            
+            if (titleCheck.hasBadWord || contentCheck.hasBadWord) {
+                showToast('内容包含不适当词汇，已被过滤', 'warning');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                author: authorType === 'name' ? authorName : '匿名用户',
+                timestamp: new Date().toISOString(),
+                isFiltered: false
+            };
+
+            contentDB[currentSection].unshift(newItem);
+            saveToStorage();
+            renderSection(currentSection);
+            closeModal();
+            showToast('发布成功！', 'success');
+        }
+
+        function checkBadWords(text) {
+            let hasBadWord = false;
+            let filteredText = text;
+
+            for (const word of badWords) {
+                if (text.toLowerCase().includes(word.toLowerCase())) {
+                    hasBadWord = true;
+                    const stars = '*'.repeat(word.length);
+                    const regex = new RegExp(word, 'gi');
+                    filteredText = filteredText.replace(regex, stars);
+                }
+            }
+
+            return { hasBadWord, filteredText };
+        }
+
+        function deleteItem(section, id) {
+            if (confirm('确定要删除这条内容吗？')) {
+                contentDB[section] = contentDB[section].filter(item => item.id !== id);
+                saveToStorage();
+                renderSection(section);
+                showToast('已删除', 'success');
+            }
+        }
+
+        function checkAutoDelete() {
+            const now = new Date();
+            let deleted = false;
+
+            for (const section in contentDB) {
+                const originalLength = contentDB[section].length;
+                contentDB[section] = contentDB[section].filter(item => {
+                    const itemTime = new Date(item.timestamp);
+                    const hoursDiff = (now - itemTime) / (1000 * 60 * 60);
+                    return hoursDiff < AUTO_DELETE_HOURS;
+                });
+                if (contentDB[section].length !== originalLength) {
+                    deleted = true;
+                }
+            }
+
+            if (deleted) {
+                saveToStorage();
+                renderAll();
+            }
+        }
+
+        function renderAll() {
+            renderSection('announcement');
+            renderSection('lostfound');
+            renderSection('message');
+        }
+
+        function renderSection(section) {
+            const list = document.getElementById(`${section}-list`);
+            const items = contentDB[section];
+
+            if (items.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-text">暂无内容，快来发布第一条吧！</div>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = items.map(item => {
+                const date = new Date(item.timestamp);
+                const timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                
+                const now = new Date();
+                const hoursDiff = (now - date) / (1000 * 60 * 60);
+                const remainingHours = Math.max(0, AUTO_DELETE_HOURS - hoursDiff);
+                const isExpiring = remainingHours < 1;
+                const authorDisplay = item.author || '匿名用户';
+
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <span class="card-title">${escapeHtml(item.title)}</span>
+                                ${isExpiring ? '<span class="warning-tag">即将过期</span>' : ''}
+                            </div>
+                            <span class="card-meta">${timeStr}</span>
+                        </div>
+                        <div class="author-tag">✍️ ${escapeHtml(authorDisplay)}</div>
+                        <div class="card-content">${escapeHtml(item.content)}</div>
+                        <div class="card-footer">
+                            <span class="card-meta">剩余 ${Math.ceil(remainingHours)} 小时后自动删除</span>
+                            <button class="delete-btn" onclick="deleteItem('${section}', ${item.id})">删除</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
