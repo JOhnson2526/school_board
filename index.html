@@ -11,64 +11,149 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
         body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             padding-bottom: 40px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         header {
             background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            padding: 20px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            padding: 24px 0;
             margin-bottom: 30px;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
         }
 
         header h1 {
             text-align: center;
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 20px;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
         }
 
         nav {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .nav-btn {
-            padding: 12px 30px;
+            padding: 10px 28px;
             border: none;
-            background: #e0e0e0;
-            color: #333;
-            font-size: 1rem;
-            border-radius: 25px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+            color: var(--primary-color);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            max-width: 350px;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-bar button {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: var(--radius-lg);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .nav-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+        .search-bar button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
         }
 
-        .nav-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        main {
+            padding: 8px 0;
         }
 
         .section {
@@ -77,34 +162,45 @@
 
         .section.active {
             display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
+            padding: 0 8px;
         }
 
         .section-header h2 {
             color: white;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .add-btn {
-            padding: 10px 25px;
+            padding: 11px 26px;
             border: none;
-            background: #4CAF50;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            font-size: 1rem;
-            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: var(--radius-lg);
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
         }
 
         .add-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
         }
 
         .content-list {
@@ -115,68 +211,298 @@
 
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .card-title {
-            font-size: 1.3rem;
-            color: #333;
-            font-weight: bold;
+            font-size: 1.25rem;
+            color: #1e293b;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .card-title::first-letter {
+            color: var(--primary-color);
         }
 
         .card-meta {
-            color: #888;
-            font-size: 0.9rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-image {
+            margin: 16px 0;
+            max-width: 100%;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.02);
         }
 
         .card-content {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            color: #475569;
+            line-height: 1.8;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: var(--radius-sm);
+        }
+
+        .card-content .censored {
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: var(--primary-color);
+            padding: 5px 14px;
+            border-radius: var(--radius-lg);
+            font-size: 0.825rem;
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .tag.status-resolved {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 7px 16px;
+            border: none;
+            background: #f8fafc;
+            color: #64748b;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .like-btn.liked {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: var(--danger-color);
+        }
+
+        .like-btn.liked:hover {
+            background: var(--danger-color);
+            color: white;
         }
 
         .delete-btn {
-            padding: 8px 20px;
-            border: none;
-            background: #ff4444;
-            color: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: #fef2f2;
+            color: var(--danger-color);
         }
 
         .delete-btn:hover {
-            background: #cc0000;
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .resolve-btn {
+            background: #ecfdf5;
+            color: var(--success-color);
+        }
+
+        .resolve-btn:hover {
+            background: var(--success-color);
+            color: white;
         }
 
         .warning-tag {
-            background: #ff9800;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #b45309;
+            padding: 4px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.775rem;
+            font-weight: 500;
             margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .author-tag {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 5px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .comments-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .comment-form input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+
+        .comment-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .comment-form button {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .comment-form button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 3px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comment-item {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.25s ease;
+        }
+
+        .comment-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            margin-bottom: 6px;
+        }
+
+        .comment-text {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .comment-time {
+            color: #94a3b8;
+            font-size: 0.775rem;
+            margin-top: 6px;
         }
 
         .modal {
@@ -186,48 +512,74 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding-top: 8vh;
         }
 
         .modal.active {
             display: flex;
+            animation: fadeInModal 0.2s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: var(--radius-xl);
+            padding: 32px;
             width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
+            max-width: 550px;
+            max-height: 85vh;
             overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .modal-header h3 {
-            color: #333;
-            font-size: 1.5rem;
+            color: #1e293b;
+            font-size: 1.35rem;
+            font-weight: 600;
         }
 
         .close-btn {
-            font-size: 2rem;
-            color: #888;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #94a3b8;
             cursor: pointer;
             border: none;
-            background: none;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            transition: all 0.25s ease;
         }
 
         .close-btn:hover {
-            color: #333;
+            background: #e2e8f0;
+            color: #64748b;
         }
 
         .form-group {
@@ -236,25 +588,31 @@
 
         .form-group label {
             display: block;
-            color: #333;
+            color: #334155;
             margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 13px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-md);
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.25s ease;
+            background: #fafafa;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .form-group textarea {
@@ -264,7 +622,7 @@
 
         .form-group-radio {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             margin-top: 10px;
         }
 
@@ -274,68 +632,118 @@
             gap: 8px;
             font-weight: normal;
             cursor: pointer;
+            font-size: 0.95rem;
         }
 
         .form-group-radio input[type="radio"] {
-            width: auto;
-            padding: 0;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
+            accent-color: var(--primary-color);
         }
 
-        .author-tag {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .form-group-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tag-option {
+            padding: 8px 18px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            color: #64748b;
+        }
+
+        .tag-option:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tag-option.selected {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 10px;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .image-preview {
+            margin-top: 12px;
+            max-width: 100%;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
 
         .submit-btn {
             width: 100%;
             padding: 15px;
             border: none;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            font-size: 1.1rem;
-            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
         }
 
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: white;
         }
 
         .empty-state-icon {
             font-size: 4rem;
             margin-bottom: 20px;
+            opacity: 0.8;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .empty-state-text {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             opacity: 0.9;
+            font-weight: 500;
         }
 
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: #333;
+            background: #1e293b;
             color: white;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-lg);
             z-index: 2000;
-            transition: transform 0.3s ease;
+            transition: transform 0.35s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
         }
 
         .toast.show {
@@ -343,27 +751,78 @@
         }
 
         .toast.warning {
-            background: #ff9800;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
 
         .toast.error {
-            background: #ff4444;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
         .toast.success {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .load-more {
+            text-align: center;
+            margin-top: 28px;
+        }
+
+        .load-more button {
+            padding: 13px 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: var(--radius-xl);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .load-more button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                flex: 1;
+                min-width: 80px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>🏫 校园公告与留言墙</h1>
+            <h1>校园公告与留言墙</h1>
             <nav>
                 <button class="nav-btn active" data-section="announcement">学校公告</button>
                 <button class="nav-btn" data-section="lostfound">失物招领</button>
                 <button class="nav-btn" data-section="message">留言墙</button>
             </nav>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="搜索内容...">
+                <button onclick="searchContent()">搜索</button>
+            </div>
         </div>
     </header>
 
@@ -374,6 +833,9 @@
                 <button class="add-btn" onclick="openModal('announcement')">+ 发布公告</button>
             </div>
             <div id="announcement-list" class="content-list"></div>
+            <div class="load-more" id="announcement-load-more" style="display: none;">
+                <button onclick="loadMore('announcement')">加载更多</button>
+            </div>
         </section>
 
         <section id="lostfound" class="section">
@@ -382,6 +844,9 @@
                 <button class="add-btn" onclick="openModal('lostfound')">+ 发布信息</button>
             </div>
             <div id="lostfound-list" class="content-list"></div>
+            <div class="load-more" id="lostfound-load-more" style="display: none;">
+                <button onclick="loadMore('lostfound')">加载更多</button>
+            </div>
         </section>
 
         <section id="message" class="section">
@@ -390,6 +855,9 @@
                 <button class="add-btn" onclick="openModal('message')">+ 发布留言</button>
             </div>
             <div id="message-list" class="content-list"></div>
+            <div class="load-more" id="message-load-more" style="display: none;">
+                <button onclick="loadMore('message')">加载更多</button>
+            </div>
         </section>
     </main>
 
@@ -397,9 +865,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modal-title">发布内容</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <button class="close-btn" onclick="closeModal()">×</button>
             </div>
             <form id="content-form">
+                <input type="hidden" id="edit-id" value="">
                 <div class="form-group">
                     <label for="content-title">标题</label>
                     <input type="text" id="content-title" placeholder="请输入标题" required>
@@ -416,13 +885,42 @@
                             署名
                         </label>
                     </div>
-                    <input type="text" id="author-name" placeholder="请输入你的名字" style="margin-top: 10px; display: none;">
+                    <input type="text" id="author-name" placeholder="请输入你的名字" style="margin-top: 12px; display: none;">
+                </div>
+                <div class="form-group" id="lostfound-fields" style="display: none;">
+                    <label for="item-type">物品类型</label>
+                    <select id="item-type">
+                        <option value="">请选择类型</option>
+                        <option value="电子产品">电子产品</option>
+                        <option value="证件">证件</option>
+                        <option value="书籍">书籍</option>
+                        <option value="衣物">衣物</option>
+                        <option value="钥匙">钥匙</option>
+                        <option value="钱包">钱包</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group" id="lostfound-tags" style="display: none;">
+                    <label>标签（可多选）</label>
+                    <div class="form-group-tags" id="tag-options">
+                        <span class="tag-option" data-tag="失物">失物</span>
+                        <span class="tag-option" data-tag="招领">招领</span>
+                        <span class="tag-option" data-tag="贵重物品">贵重物品</span>
+                        <span class="tag-option" data-tag="紧急">紧急</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="content-image">图片（可选）</label>
+                    <input type="file" id="content-image" accept="image/*">
+                    <div class="image-preview" id="image-preview-container" style="display: none;">
+                        <img id="image-preview" src="" alt="预览">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="content-text">内容</label>
                     <textarea id="content-text" placeholder="请输入内容" required></textarea>
                 </div>
-                <button type="submit" class="submit-btn">发布</button>
+                <button type="submit" class="submit-btn" id="submit-btn">发布</button>
             </form>
         </div>
     </div>
@@ -430,9 +928,19 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        const badWords = ['脏话', '骂人', '该死', '白痴', '笨蛋', '傻瓜', '神经病', '疯子', '滚蛋', '去死', '混蛋', '傻逼', 'sb', 'lala', '狗日', '妈的', '操', '日', '草', '婊子', '鸡巴', '屌', '逼', '尼玛', '你妈', '去你妈', '去你妈的', 'nigger', 'nigga', 'gay', 'faggot', 'fag', 'retard', 'idiot', 'stupid', 'dumb', 'fuck', 'shit', 'bitch', 'asshole', 'cunt', 'dick', 'pussy', 'whore', 'slut'];
+        const badWords = ['脏话', '骂人', '该死', '白痴', '笨蛋', '傻瓜', '神经病', '疯子', '滚蛋', '去死', '混蛋', '傻逼', 'sb', '狗日', '妈的', '操', '日', '草', '婊子', '鸡巴', '屌', '逼', '尼玛', '你妈', '去你妈', '去你妈的', 'nigger', 'nigga', 'gay', 'faggot', 'fag', 'retard', 'idiot', 'stupid', 'dumb', 'fuck', 'shit', 'bitch', 'asshole', 'cunt', 'dick', 'pussy', 'whore', 'slut'];
         
         let currentSection = 'announcement';
+        let selectedTags = [];
+        let editingItem = null;
+        let previewImageData = null;
+        let displayCounts = {
+            announcement: 5,
+            lostfound: 5,
+            message: 5
+        };
+        const ITEMS_PER_PAGE = 5;
+        
         let contentDB = {
             announcement: [],
             lostfound: [],
@@ -468,7 +976,6 @@
 
             document.getElementById('content-form').addEventListener('submit', handleSubmit);
 
-            // 单选按钮事件
             document.querySelectorAll('input[name="author-type"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     const authorNameInput = document.getElementById('author-name');
@@ -481,10 +988,44 @@
                     }
                 });
             });
+
+            document.getElementById('search-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchContent();
+                }
+            });
+
+            document.querySelectorAll('.tag-option').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    tag.classList.toggle('selected');
+                    const tagValue = tag.dataset.tag;
+                    if (selectedTags.includes(tagValue)) {
+                        selectedTags = selectedTags.filter(t => t !== tagValue);
+                    } else {
+                        selectedTags.push(tagValue);
+                    }
+                });
+            });
+
+            document.getElementById('content-image').addEventListener('change', handleImagePreview);
+        }
+
+        function handleImagePreview(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImageData = event.target.result;
+                    document.getElementById('image-preview').src = previewImageData;
+                    document.getElementById('image-preview-container').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
         function switchSection(section) {
             currentSection = section;
+            displayCounts[section] = 5;
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -495,26 +1036,74 @@
                 sec.classList.remove('active');
             });
             document.getElementById(section).classList.add('active');
+            
+            renderSection(section);
         }
 
-        function openModal(section) {
+        function openModal(section, itemId = null) {
             currentSection = section;
+            editingItem = itemId;
+            selectedTags = [];
+            previewImageData = null;
+            
             const titles = {
                 announcement: '发布公告',
                 lostfound: '发布失物招领',
                 message: '发布留言'
             };
-            document.getElementById('modal-title').textContent = titles[section];
+            
+            document.getElementById('modal-title').textContent = itemId ? '编辑内容' : titles[section];
+            document.getElementById('submit-btn').textContent = itemId ? '保存' : '发布';
+            document.getElementById('lostfound-fields').style.display = section === 'lostfound' ? 'block' : 'none';
+            document.getElementById('lostfound-tags').style.display = section === 'lostfound' ? 'block' : 'none';
             document.getElementById('modal').classList.add('active');
+            
             document.getElementById('content-title').value = '';
             document.getElementById('content-text').value = '';
             document.getElementById('author-name').value = '';
             document.getElementById('author-name').style.display = 'none';
+            document.getElementById('item-type').value = '';
+            document.getElementById('content-image').value = '';
+            document.getElementById('image-preview-container').style.display = 'none';
+            document.getElementById('edit-id').value = '';
+            document.querySelectorAll('.tag-option').forEach(tag => tag.classList.remove('selected'));
             document.querySelector('input[name="author-type"][value="anonymous"]').checked = true;
+            
+            if (itemId) {
+                const item = contentDB[section].find(i => i.id === itemId);
+                if (item) {
+                    document.getElementById('edit-id').value = itemId;
+                    document.getElementById('content-title').value = item.title;
+                    document.getElementById('content-text').value = item.originalContent || item.content;
+                    document.getElementById('author-name').value = item.author === '匿名用户' ? '' : item.author;
+                    if (item.author !== '匿名用户') {
+                        document.querySelector('input[name="author-type"][value="name"]').checked = true;
+                        document.getElementById('author-name').style.display = 'block';
+                    }
+                    if (item.itemType) {
+                        document.getElementById('item-type').value = item.itemType;
+                    }
+                    if (item.tags) {
+                        selectedTags = [...item.tags];
+                        document.querySelectorAll('.tag-option').forEach(tag => {
+                            if (selectedTags.includes(tag.dataset.tag)) {
+                                tag.classList.add('selected');
+                            }
+                        });
+                    }
+                    if (item.image) {
+                        previewImageData = item.image;
+                        document.getElementById('image-preview').src = item.image;
+                        document.getElementById('image-preview-container').style.display = 'block';
+                    }
+                }
+            }
         }
 
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
+            editingItem = null;
+            previewImageData = null;
         }
 
         function handleSubmit(e) {
@@ -523,6 +1112,8 @@
             const content = document.getElementById('content-text').value.trim();
             const authorType = document.querySelector('input[name="author-type"]:checked').value;
             const authorName = document.getElementById('author-name').value.trim();
+            const itemType = document.getElementById('item-type').value;
+            const editId = document.getElementById('edit-id').value;
 
             if (!title || !content) {
                 showToast('请填写完整信息', 'error');
@@ -534,29 +1125,54 @@
                 return;
             }
 
-            // 检查标题和内容中的违禁词
             const titleCheck = checkBadWords(title);
             const contentCheck = checkBadWords(content);
             
+            const finalTitle = titleCheck.filteredText;
+            const finalContent = contentCheck.filteredText;
+            
             if (titleCheck.hasBadWord || contentCheck.hasBadWord) {
-                showToast('内容包含不适当词汇，已被过滤', 'warning');
-                return;
+                showToast('内容包含不适当词汇，已自动过滤', 'warning');
             }
 
-            const newItem = {
-                id: Date.now(),
-                title: title,
-                content: content,
+            const itemData = {
+                title: finalTitle,
+                content: finalContent,
+                originalContent: content,
                 author: authorType === 'name' ? authorName : '匿名用户',
-                timestamp: new Date().toISOString(),
-                isFiltered: false
+                likes: 0,
+                likedBy: [],
+                comments: [],
+                tags: [...selectedTags],
+                image: previewImageData || null,
+                itemType: itemType || null,
+                resolved: false
             };
 
-            contentDB[currentSection].unshift(newItem);
+            if (editId) {
+                const index = contentDB[currentSection].findIndex(i => i.id === parseInt(editId));
+                if (index !== -1) {
+                    contentDB[currentSection][index] = {
+                        ...contentDB[currentSection][index],
+                        ...itemData,
+                        editedAt: new Date().toISOString()
+                    };
+                    showToast('编辑成功', 'success');
+                }
+            } else {
+                const newItem = {
+                    id: Date.now(),
+                    ...itemData,
+                    timestamp: new Date().toISOString(),
+                    isFiltered: titleCheck.hasBadWord || contentCheck.hasBadWord
+                };
+                contentDB[currentSection].unshift(newItem);
+                showToast('发布成功', 'success');
+            }
+
             saveToStorage();
             renderSection(currentSection);
             closeModal();
-            showToast('发布成功！', 'success');
         }
 
         function checkBadWords(text) {
@@ -564,11 +1180,12 @@
             let filteredText = text;
 
             for (const word of badWords) {
-                if (text.toLowerCase().includes(word.toLowerCase())) {
+                const regex = new RegExp(word, 'gi');
+                if (regex.test(text)) {
                     hasBadWord = true;
-                    const stars = '*'.repeat(word.length);
-                    const regex = new RegExp(word, 'gi');
-                    filteredText = filteredText.replace(regex, stars);
+                    filteredText = filteredText.replace(regex, (match) => {
+                        return `<span class="censored">${'*'.repeat(match.length)}</span>`;
+                    });
                 }
             }
 
@@ -582,6 +1199,102 @@
                 renderSection(section);
                 showToast('已删除', 'success');
             }
+        }
+
+        function toggleLike(section, id) {
+            const item = contentDB[section].find(i => i.id === id);
+            if (item) {
+                const userId = 'user_' + (localStorage.getItem('userId') || Math.random().toString(36).substr(2, 9));
+                if (!localStorage.getItem('userId')) {
+                    localStorage.setItem('userId', userId.substr(5));
+                }
+                
+                if (item.likedBy.includes(userId)) {
+                    item.likes--;
+                    item.likedBy = item.likedBy.filter(u => u !== userId);
+                } else {
+                    item.likes++;
+                    item.likedBy.push(userId);
+                }
+                
+                saveToStorage();
+                renderSection(section);
+            }
+        }
+
+        function addComment(section, id) {
+            const input = document.getElementById(`comment-input-${id}`);
+            const commentText = input.value.trim();
+            
+            if (!commentText) {
+                showToast('请输入评论内容', 'error');
+                return;
+            }
+            
+            const item = contentDB[section].find(i => i.id === id);
+            if (item) {
+                item.comments.push({
+                    id: Date.now(),
+                    text: commentText,
+                    author: '匿名用户',
+                    timestamp: new Date().toISOString()
+                });
+                
+                saveToStorage();
+                renderSection(section);
+                showToast('评论成功', 'success');
+            }
+        }
+
+        function toggleResolved(section, id) {
+            const item = contentDB[section].find(i => i.id === id);
+            if (item) {
+                item.resolved = !item.resolved;
+                saveToStorage();
+                renderSection(section);
+                showToast(item.resolved ? '已标记为已解决' : '已取消标记', 'success');
+            }
+        }
+
+        function toggleComments(id) {
+            const commentsSection = document.getElementById(`comments-${id}`);
+            if (commentsSection) {
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        function searchContent() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            if (!query) {
+                renderAll();
+                return;
+            }
+            
+            for (const section in contentDB) {
+                const list = document.getElementById(`${section}-list`);
+                const items = contentDB[section].filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    (item.originalContent || item.content).toLowerCase().includes(query)
+                );
+                
+                if (items.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <div class="empty-state-text">未找到相关内容</div>
+                        </div>
+                    `;
+                } else {
+                    list.innerHTML = items.map(item => renderCard(item, section)).join('');
+                }
+                
+                document.getElementById(`${section}-load-more`).style.display = 'none';
+            }
+        }
+
+        function loadMore(section) {
+            displayCounts[section] += ITEMS_PER_PAGE;
+            renderSection(section);
         }
 
         function checkAutoDelete() {
@@ -607,6 +1320,7 @@
         }
 
         function renderAll() {
+            displayCounts = { announcement: 5, lostfound: 5, message: 5 };
             renderSection('announcement');
             renderSection('lostfound');
             renderSection('message');
@@ -614,46 +1328,106 @@
 
         function renderSection(section) {
             const list = document.getElementById(`${section}-list`);
-            const items = contentDB[section];
+            const loadMoreBtn = document.getElementById(`${section}-load-more`);
+            const allItems = contentDB[section];
+            const displayCount = displayCounts[section];
+            const items = allItems.slice(0, displayCount);
 
-            if (items.length === 0) {
+            if (allItems.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📭</div>
                         <div class="empty-state-text">暂无内容，快来发布第一条吧！</div>
                     </div>
                 `;
+                loadMoreBtn.style.display = 'none';
                 return;
             }
 
-            list.innerHTML = items.map(item => {
-                const date = new Date(item.timestamp);
-                const timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                
-                const now = new Date();
-                const hoursDiff = (now - date) / (1000 * 60 * 60);
-                const remainingHours = Math.max(0, AUTO_DELETE_HOURS - hoursDiff);
-                const isExpiring = remainingHours < 1;
-                const authorDisplay = item.author || '匿名用户';
+            list.innerHTML = items.map(item => renderCard(item, section)).join('');
+            
+            if (allItems.length > displayCount) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
 
-                return `
-                    <div class="card">
-                        <div class="card-header">
-                            <div>
-                                <span class="card-title">${escapeHtml(item.title)}</span>
-                                ${isExpiring ? '<span class="warning-tag">即将过期</span>' : ''}
-                            </div>
-                            <span class="card-meta">${timeStr}</span>
+        function renderCard(item, section) {
+            const date = new Date(item.timestamp);
+            const timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            
+            const now = new Date();
+            const hoursDiff = (now - date) / (1000 * 60 * 60);
+            const remainingHours = Math.max(0, AUTO_DELETE_HOURS - hoursDiff);
+            const isExpiring = remainingHours < 1;
+            const authorDisplay = item.author || '匿名用户';
+            
+            const userId = 'user_' + (localStorage.getItem('userId') || '');
+            const isLiked = item.likedBy && item.likedBy.includes(userId);
+
+            let tagsHtml = '';
+            if (item.tags && item.tags.length > 0) {
+                tagsHtml = '<div class="card-tags">' + 
+                    item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') +
+                    (item.resolved ? '<span class="tag status-resolved">✅ 已解决</span>' : '') +
+                    '</div>';
+            } else if (item.resolved) {
+                tagsHtml = '<div class="card-tags"><span class="tag status-resolved">✅ 已解决</span></div>';
+            }
+
+            let imageHtml = '';
+            if (item.image) {
+                imageHtml = `<div class="card-image"><img src="${item.image}" alt="图片"></div>`;
+            }
+
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <span class="card-title">${escapeHtml(item.title)}</span>
+                            ${isExpiring ? '<span class="warning-tag">即将过期</span>' : ''}
                         </div>
-                        <div class="author-tag">✍️ ${escapeHtml(authorDisplay)}</div>
-                        <div class="card-content">${escapeHtml(item.content)}</div>
-                        <div class="card-footer">
-                            <span class="card-meta">剩余 ${Math.ceil(remainingHours)} 小时后自动删除</span>
-                            <button class="delete-btn" onclick="deleteItem('${section}', ${item.id})">删除</button>
+                        <span class="card-meta">📅 ${timeStr}</span>
+                    </div>
+                    <div class="author-tag">✍️ ${escapeHtml(authorDisplay)}</div>
+                    ${imageHtml}
+                    ${tagsHtml}
+                    <div class="card-content">${item.content}</div>
+                    <div class="card-footer">
+                        <span class="card-meta">⏱️ 剩余 ${Math.ceil(remainingHours)} 小时后自动删除</span>
+                        <div class="card-actions">
+                            <button class="action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${section}', ${item.id})">
+                                ❤️ ${item.likes || 0}
+                            </button>
+                            <button class="action-btn" onclick="toggleComments(${item.id})">
+                                💬 ${item.comments ? item.comments.length : 0}
+                            </button>
+                            <button class="action-btn" onclick="openModal('${section}', ${item.id})">✏️ 编辑</button>
+                            ${section === 'lostfound' ? `<button class="action-btn resolve-btn" onclick="toggleResolved('${section}', ${item.id})">${item.resolved ? '↩️ 取消' : '✅ 解决'}</button>` : ''}
+                            <button class="action-btn delete-btn" onclick="deleteItem('${section}', ${item.id})">🗑️ 删除</button>
                         </div>
                     </div>
-                `;
-            }).join('');
+                    <div class="comments-section" id="comments-${item.id}" style="display: none;">
+                        <div class="comment-form">
+                            <input type="text" id="comment-input-${item.id}" placeholder="写下你的评论...">
+                            <button onclick="addComment('${section}', ${item.id})">发送</button>
+                        </div>
+                        <div class="comment-list">
+                            ${(item.comments || []).map(comment => {
+                                const commentDate = new Date(comment.timestamp);
+                                return `
+                                    <div class="comment-item">
+                                        <div class="comment-author">${escapeHtml(comment.author)}</div>
+                                        <div class="comment-text">${escapeHtml(comment.text)}</div>
+                                        <div class="comment-time">${commentDate.toLocaleString()}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function escapeHtml(text) {
